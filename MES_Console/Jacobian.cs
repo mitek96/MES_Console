@@ -163,7 +163,7 @@ namespace MES_Console
                 inversedJacobian[3, i] = jacobian[0, i] / detJacobian[i];
             }
 
-            a
+            
         }
 
         public void printJacobian()
