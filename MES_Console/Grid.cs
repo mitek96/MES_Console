@@ -51,17 +51,17 @@ namespace MES_Console
         public int CalculateNodeArray()
         {
             numberOfNodes = nH * nL;
-            dx = L / (nL-1);
-            dy = H / (nH-1);
+            dx = L / (nL - 1);
+            dy = H / (nH - 1);
             nodes = new Node[numberOfNodes];
-            for(int i=0; i<numberOfNodes;++i)
+            for (int i = 0; i < numberOfNodes; ++i)
             {
                 nodes[i] = new Node();
                 nodes[i].T = initTemperature;
             }
-            for(int nX = 0; nX < nL;++nX)
+            for (int nX = 0; nX < nL; ++nX)
             {
-                for(int nY=0;nY<nH;++nY)
+                for (int nY = 0; nY < nH; ++nY)
                 {
                     if (nY == nH - 1) nodes[nY + (nX * nH)].Y1 = startY + H;
                     else nodes[nY + (nX * nH)].Y1 = startY + (nY * dy);
@@ -75,13 +75,13 @@ namespace MES_Console
 
         public int CalculateElementArray()
         {
-            
+
             numberOfElements = (nH - 1) * (nL - 1);
-            if (numberOfElements<1) return 0;
+            if (numberOfElements < 1) return 0;
             elements = new Element[numberOfElements];
             int dNodeX = nH;
-            int offset=0;
-            for(int i=0;i<numberOfElements;++i)
+            int offset = 0;
+            for (int i = 0; i < numberOfElements; ++i)
             {
                 if (i != 0 && (i % (nH - 1)) == 0) offset++;
                 elements[i] = new Element(i + offset + 1, i + dNodeX + offset + 1, i + dNodeX + offset + 2, i + offset + 2);
@@ -93,7 +93,7 @@ namespace MES_Console
 
         public void CalculateElements()
         {
-            for(int i=0;i<numberOfElements;++i)
+            for (int i = 0; i < numberOfElements; ++i)
             {
                 Jacobian jacobian = new Jacobian();
                 jacobian.calculateJacobian(elements[i]);
@@ -102,9 +102,9 @@ namespace MES_Console
                 MatrixC tempMatrixC = new MatrixC(specificHeat, density, jacobian.getDetJArray());
                 MatrixH_BC tempMatrixH_BC = new MatrixH_BC(alpha, elements[i]);
                 VectorP tempVectorP = new VectorP(alpha, ambientTemperature, elements[i]);
-                elements[i].LocalMatrixC=tempMatrixC.CalculateMatrixC();
-                elements[i].LocalMatrixH=elements[i].LocalMatrixH.Add(tempMatrixH_BC.CalculateMatrixH_BC());
-                elements[i].LocalVectorP=tempVectorP.CalculateVectorP();
+                elements[i].LocalMatrixC = tempMatrixC.CalculateMatrixC();
+                elements[i].LocalMatrixH = elements[i].LocalMatrixH.Add(tempMatrixH_BC.CalculateMatrixH_BC());
+                elements[i].LocalVectorP = tempVectorP.CalculateVectorP();
                 elements[i].PrintLocalMatrices();
             }
         }
@@ -112,9 +112,9 @@ namespace MES_Console
 
         public void PrintNodes()
         {
-            for(int i=0;i<numberOfNodes;++i)
+            for (int i = 0; i < numberOfNodes; ++i)
             {
-                Console.WriteLine("NodeId:"+nodes[i].Id+"   NodeCoordinates: ("+nodes[i].X1+"|"+nodes[i].Y1+") T="+nodes[i].T);
+                Console.WriteLine("NodeId:" + nodes[i].Id + "   NodeCoordinates: (" + nodes[i].X1 + "|" + nodes[i].Y1 + ") T=" + nodes[i].T);
             }
         }
 
@@ -125,15 +125,15 @@ namespace MES_Console
 
         public void PrintNodeById(int id)
         {
-            Console.WriteLine("NodeId:" + nodes[id-1].Id + "   NodeCoordinates: (" + nodes[id-1].X1 + "|" + nodes[id-1].Y1 + ")");
+            Console.WriteLine("NodeId:" + nodes[id - 1].Id + "   NodeCoordinates: (" + nodes[id - 1].X1 + "|" + nodes[id - 1].Y1 + ")");
         }
 
         public void PrintElements()
         {
-            for(int i=0;i<numberOfElements;++i)
+            for (int i = 0; i < numberOfElements; ++i)
             {
                 int[] tmp = elements[i].getNodesId();
-                Console.WriteLine("ElementId:"+i+"   ElementNodes: "+tmp[0]+","+tmp[1]+","+tmp[2] + "," + tmp[3]);
+                Console.WriteLine("ElementId:" + i + "   ElementNodes: " + tmp[0] + "," + tmp[1] + "," + tmp[2] + "," + tmp[3]);
             }
         }
 
@@ -142,12 +142,12 @@ namespace MES_Console
             return elements[index];
         }
 
-        public void SetHeatedSurfaces(Boolean bottom, Boolean right,Boolean top,Boolean left)
+        public void SetHeatedSurfaces(Boolean bottom, Boolean right, Boolean top, Boolean left)
         {
-            if(bottom)
+            if (bottom)
             {
-                for(int i=0; i < nL - 1; ++i)
-                elements[i * (nH - 1)].SetSurface(0,true);
+                for (int i = 0; i < nL - 1; ++i)
+                    elements[i * (nH - 1)].SetSurface(0, true);
             }
 
             if (right)
@@ -156,7 +156,7 @@ namespace MES_Console
                     elements[i].SetSurface(1, true);
             }
 
-            if(top)
+            if (top)
             {
                 for (int i = 0; i < nL - 1; i++)
                     elements[i * (nH - 1) + (nH - 2)].SetSurface(2, true);
@@ -171,11 +171,11 @@ namespace MES_Console
 
         public void AgregateaMatrices()
         {
-            for(int i=0;i<numberOfElements;++i)
+            for (int i = 0; i < numberOfElements; ++i)
             {
-                for(int iLocal=0;iLocal<4;++iLocal)
+                for (int iLocal = 0; iLocal < 4; ++iLocal)
                 {
-                    for(int jLocal=0;jLocal<4;++jLocal)
+                    for (int jLocal = 0; jLocal < 4; ++jLocal)
                     {
                         int iGlobal = elements[i].getNode(iLocal).Id - 1;
                         int jGlobal = elements[i].getNode(jLocal).Id - 1;
@@ -183,7 +183,7 @@ namespace MES_Console
                         double valueHLocal = elements[i].LocalMatrixH[iLocal, jLocal];
                         globalMatrixH[iGlobal, jGlobal] += valueHLocal;
 
-                        double valueCLocal= elements[i].LocalMatrixC[iLocal, jLocal];
+                        double valueCLocal = elements[i].LocalMatrixC[iLocal, jLocal];
                         globalMatrixC[iGlobal, jGlobal] += valueCLocal;
                     }
                 }
@@ -211,10 +211,10 @@ namespace MES_Console
         {
             Matrix<double> leftEquation = globalMatrixH.Add(globalMatrixC.Divide(timeStep));
             Console.WriteLine("H+C/dt" + leftEquation.ToString());
-            for(double time=timeStep;time<=simulationTime;time+=timeStep)
+            for (double time = timeStep; time <= simulationTime; time += timeStep)
             {
                 Vector<double> t0 = Vector<double>.Build.Dense(numberOfNodes);
-                for(int i=0;i<numberOfNodes;++i)
+                for (int i = 0; i < numberOfNodes; ++i)
                 {
                     t0[i] = nodes[i].T;
                 }
@@ -224,7 +224,7 @@ namespace MES_Console
 
                 for (int i = 0; i < numberOfNodes; ++i)
                 {
-                    nodes[i].T=t1[i];
+                    nodes[i].T = t1[i];
                 }
 
                 Console.WriteLine("Interval=" + time);

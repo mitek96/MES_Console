@@ -10,7 +10,7 @@ namespace MES_Console
     struct PointKsiEta
     {
         public double ksi, eta;
-        public void SetCoordinates(double ksi,double eta)
+        public void SetCoordinates(double ksi, double eta)
         {
             this.ksi = ksi;
             this.eta = eta;
@@ -24,7 +24,7 @@ namespace MES_Console
 
     class MatrixH_BC
     {
-        
+
 
         double alpha;
         Element element;
@@ -48,7 +48,7 @@ namespace MES_Console
 
         public void Init()
         {
-            
+
             integralPoints[0].SetCoordinates(-1.0 / Math.Sqrt(3.0), -1.0);
             integralPoints[1].SetCoordinates(1.0 / Math.Sqrt(3.0), -1.0);
             integralPoints[2].SetCoordinates(1.0, -1.0 / Math.Sqrt(3.0));
@@ -58,8 +58,8 @@ namespace MES_Console
             integralPoints[6].SetCoordinates(-1.0, 1.0 / Math.Sqrt(3.0));
             integralPoints[7].SetCoordinates(-1.0, -1.0 / Math.Sqrt(3.0));
 
-            length[0]= Math.Sqrt(Math.Pow(element.getNode(1).X1 - element.getNode(0).X1, 2) + Math.Pow(element.getNode(1).Y1 - element.getNode(0).Y1, 2));
-            length[1]= Math.Sqrt(Math.Pow(element.getNode(1).X1 - element.getNode(2).X1, 2) + Math.Pow(element.getNode(1).Y1 - element.getNode(2).Y1, 2));
+            length[0] = Math.Sqrt(Math.Pow(element.getNode(1).X1 - element.getNode(0).X1, 2) + Math.Pow(element.getNode(1).Y1 - element.getNode(0).Y1, 2));
+            length[1] = Math.Sqrt(Math.Pow(element.getNode(1).X1 - element.getNode(2).X1, 2) + Math.Pow(element.getNode(1).Y1 - element.getNode(2).Y1, 2));
             length[2] = Math.Sqrt(Math.Pow(element.getNode(2).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(2).Y1 - element.getNode(3).Y1, 2));
             length[3] = Math.Sqrt(Math.Pow(element.getNode(0).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(0).Y1 - element.getNode(3).Y1, 2));
 
@@ -71,7 +71,7 @@ namespace MES_Console
 
         private Matrix<double> CalculateShapeFunctions(PointKsiEta integralPoint)
         {
-            return Matrix<double>.Build.DenseOfRowArrays(new double[] { 0.25 * (1 - integralPoint.ksi) * (1 - integralPoint.eta), 0.25 * (1 + integralPoint.ksi) * (1 - integralPoint.eta), 0.25 * (1 + integralPoint.ksi) * (1 + integralPoint.eta) , 0.25 * (1 - integralPoint.ksi) * (1 + integralPoint.eta) });
+            return Matrix<double>.Build.DenseOfRowArrays(new double[] { 0.25 * (1 - integralPoint.ksi) * (1 - integralPoint.eta), 0.25 * (1 + integralPoint.ksi) * (1 - integralPoint.eta), 0.25 * (1 + integralPoint.ksi) * (1 + integralPoint.eta), 0.25 * (1 - integralPoint.ksi) * (1 + integralPoint.eta) });
         }
 
         private Surface CalculateSurface(PointKsiEta point1, PointKsiEta point2, double detJ)
@@ -91,7 +91,7 @@ namespace MES_Console
         public Matrix<double> CalculateMatrixH_BC()
         {
             Surface bottom, right, top, left;
-            
+
             bottom = CalculateSurface(integralPoints[0], integralPoints[1], detJ[0]);
             right = CalculateSurface(integralPoints[2], integralPoints[3], detJ[1]);
             top = CalculateSurface(integralPoints[4], integralPoints[5], detJ[2]);
@@ -105,13 +105,13 @@ namespace MES_Console
             if (element.GetSurface(3)) matrixH_BC = matrixH_BC.Add(left.sum);
 
             return matrixH_BC;
-        } 
-        
+        }
+
         public void print()
         {
             Console.Write(matrixH_BC.ToString());
         }
-        
+
     }
 }
 

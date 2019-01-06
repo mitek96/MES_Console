@@ -8,7 +8,7 @@ namespace MES_Console
 {
     class Node
     {
-        static int idReference=0;
+        static int idReference = 0;
 
         double X, Y;
         public double T { get; set; }

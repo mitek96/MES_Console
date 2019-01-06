@@ -30,7 +30,7 @@ namespace MES_Console
             Id = ++idReference;
         }
 
-        public Element(int id1,int id2,int id3,int id4)
+        public Element(int id1, int id2, int id3, int id4)
         {
             idArray = new int[4];
             isSurfaceHeated = new bool[4];
@@ -41,10 +41,10 @@ namespace MES_Console
             Id = ++idReference;
         }
 
-        public int [] getNodesId()
+        public int[] getNodesId()
         {
-            int [] returnId = new int[4];
-            for(int i=0;i<4;++i)
+            int[] returnId = new int[4];
+            for (int i = 0; i < 4; ++i)
             {
                 returnId[i] = idArray[i];
             }
@@ -80,13 +80,13 @@ namespace MES_Console
 
         public bool GetSurface(int index)
         {
-            return isSurfaceHeated[index]; 
+            return isSurfaceHeated[index];
         }
 
         public void PrintLocalMatrices()
         {
             Console.WriteLine("elID=" + Id);
-            Console.WriteLine("MatrixH\n"+LocalMatrixH.ToString());
+            Console.WriteLine("MatrixH\n" + LocalMatrixH.ToString());
             Console.WriteLine("MatrixC\n" + LocalMatrixC.ToString());
             Console.WriteLine("VectorP\n" + LocalVectorP.ToString());
         }

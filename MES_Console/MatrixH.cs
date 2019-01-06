@@ -34,9 +34,9 @@ namespace MES_Console
         }
 
 
-        public Matrix<double> calculateMatrixH(Jacobian jacobian,double k)
+        public Matrix<double> calculateMatrixH(Jacobian jacobian, double k)
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 dNdx[0, i] = jacobian.getInversedJacobian(0, 0) * jacobian.getDNdKsi(i, 0) + jacobian.getInversedJacobian(1, 0) * jacobian.getDNdEta(i, 0);
                 dNdx[1, i] = jacobian.getInversedJacobian(0, 1) * jacobian.getDNdKsi(i, 1) + jacobian.getInversedJacobian(1, 1) * jacobian.getDNdEta(i, 1);
@@ -51,11 +51,11 @@ namespace MES_Console
             }
 
 
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
-                for(int j=0;j<4;++j)
+                for (int j = 0; j < 4; ++j)
                 {
-                    for(int z=0;z<4;++z)
+                    for (int z = 0; z < 4; ++z)
                     {
                         dNdxT[i, j, z] = dNdx[i, j] * dNdx[i, z];
                         dNdyT[i, j, z] = dNdy[i, j] * dNdy[i, z];
@@ -68,9 +68,9 @@ namespace MES_Console
                 }
             }
 
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
-                for(int j=0;j<4;++j)
+                for (int j = 0; j < 4; ++j)
                 {
                     H[i, j] = sum[0, i, j] + sum[1, i, j] + sum[2, i, j] + sum[3, i, j];
                 }
@@ -83,12 +83,12 @@ namespace MES_Console
         {
             for (int i = 0; i < 4; ++i)
             {
-                Console.WriteLine("dNdxT[" + pcIndex + ","+ i + ",0]=" + dNdxT[pcIndex, i, 0]);
-                Console.WriteLine("dNdxT[" + pcIndex + ","+ i + ",1]=" + dNdxT[pcIndex, i, 1]);
-                Console.WriteLine("dNdxT[" + pcIndex + ","+ i + ",2]=" + dNdxT[pcIndex, i, 2]);
-                Console.WriteLine("dNdxT[" + pcIndex + ","+ i + ",3]=" + dNdxT[pcIndex, i, 3]);
+                Console.WriteLine("dNdxT[" + pcIndex + "," + i + ",0]=" + dNdxT[pcIndex, i, 0]);
+                Console.WriteLine("dNdxT[" + pcIndex + "," + i + ",1]=" + dNdxT[pcIndex, i, 1]);
+                Console.WriteLine("dNdxT[" + pcIndex + "," + i + ",2]=" + dNdxT[pcIndex, i, 2]);
+                Console.WriteLine("dNdxT[" + pcIndex + "," + i + ",3]=" + dNdxT[pcIndex, i, 3]);
             }
-            
+
         }
 
         public void printDNdxTdetJ(int pcIndex)
@@ -126,7 +126,7 @@ namespace MES_Console
 
         public void printDNdx()
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 Console.WriteLine("dNdx[" + i + ",0]=" + dNdx[i, 0]);
                 Console.WriteLine("dNdx[" + i + ",1]=" + dNdx[i, 1]);

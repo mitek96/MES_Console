@@ -25,21 +25,21 @@ namespace MES_Console
             double density = double.Parse(lines[11]);
             Grid grid = new Grid(initTemperature, simulationTime, timeStep, ambientTemperature, alpha, h, l, nH, nL, specificHeat, conductivity, density);
             int nodeNumber = grid.CalculateNodeArray();
-            Console.WriteLine("Number of Nodes: "+nodeNumber);
+            Console.WriteLine("Number of Nodes: " + nodeNumber);
             grid.PrintNodes();
             int elementNumber = grid.CalculateElementArray();
-            Console.WriteLine("Number of Elements: "+elementNumber);
+            Console.WriteLine("Number of Elements: " + elementNumber);
             grid.PrintElements();
             grid.SetHeatedSurfaces(true, true, true, true);
-          
+
 
             grid.CalculateElements();
-            
+
             grid.AgregateaMatrices();
             grid.AgregateVectorP();
             grid.Heat();
             grid.PrintNodes();
-            
+
 
         }
     }

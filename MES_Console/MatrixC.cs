@@ -12,19 +12,19 @@ namespace MES_Console
         double[] ksi;
         double[] eta;
         double[] detJ;  //wyznacznik macierzy Jakobiego
-        
+
         double C, ro;
         Matrix<double> matrixC;
         Matrix<double>[] pc; //macierze punktów całkowania
 
-        public MatrixC(double C, double ro, double [] detJ)
+        public MatrixC(double C, double ro, double[] detJ)
         {
             matrixC = Matrix<double>.Build.Dense(4, 4);
             ksi = new double[4];
             eta = new double[4];
 
             pc = new Matrix<double>[4];
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 pc[i] = Matrix<double>.Build.Dense(4, 4);
             }
@@ -53,8 +53,8 @@ namespace MES_Console
                 matrixC[i, 3] = 0.25 * (1 - ksi[i]) * (1 + eta[i]);
             }
 
-            for(int i=0;i<4;++i)
-            { 
+            for (int i = 0; i < 4; ++i)
+            {
                 pc[i] = matrixC.Row(i).ToColumnMatrix() * matrixC.Row(i).ToRowMatrix();
                 double toMul = C * ro * detJ[i];
                 pc[i] = pc[i].Multiply(toMul);
@@ -72,9 +72,9 @@ namespace MES_Console
         {
             Console.Write(matrixC.ToString());
         }
-           
 
-        
+
+
 
 
 

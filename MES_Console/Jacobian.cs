@@ -47,7 +47,7 @@ namespace MES_Console
             return dNdKsi[x, y];
         }
 
-        public double getDNdEta(int x,int y)
+        public double getDNdEta(int x, int y)
         {
             return dNdEta[x, y];
         }
@@ -67,7 +67,7 @@ namespace MES_Console
             return detJacobian[x];
         }
 
-        public double [] getDetJArray()
+        public double[] getDetJArray()
         {
             return detJacobian;
         }
@@ -75,8 +75,8 @@ namespace MES_Console
 
         public void CalculateShapeFunctions()
         {
-            
-            for(int i =0;i<4;++i)
+
+            for (int i = 0; i < 4; ++i)
             {
                 N[i, 0] = 0.25 * (1 - ksi[i]) * (1 - eta[i]);
                 N[i, 1] = 0.25 * (1 + ksi[i]) * (1 - eta[i]);
@@ -87,7 +87,7 @@ namespace MES_Console
 
         public void printShapeFunctions()
         {
-            for(int i =0;i<4; ++i)
+            for (int i = 0; i < 4; ++i)
             {
                 Console.WriteLine("N(" + i + ",0)=" + N[i, 0]);
                 Console.WriteLine("N(" + i + ",1)=" + N[i, 1]);
@@ -98,26 +98,26 @@ namespace MES_Console
 
         public void calculateInterpolatedCoordinates(Element element)
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 interpolatedCoordinates[i, 0] = N[i, 0] * element.getNode(0).X1 + N[i, 1] * element.getNode(1).X1 + N[i, 2] * element.getNode(2).X1 + N[i, 3] * element.getNode(3).X1;
-                interpolatedCoordinates[i,1]= N[i, 0] * element.getNode(0).Y1 + N[i, 1] * element.getNode(1).Y1 + N[i, 2] * element.getNode(2).Y1 + N[i, 3] * element.getNode(3).Y1;
+                interpolatedCoordinates[i, 1] = N[i, 0] * element.getNode(0).Y1 + N[i, 1] * element.getNode(1).Y1 + N[i, 2] * element.getNode(2).Y1 + N[i, 3] * element.getNode(3).Y1;
             }
         }
 
         public void printInterpolatedCoordinates()
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
-                Console.WriteLine("Xp(" + i + ")=" + interpolatedCoordinates[i, 0]+"  , Yp("+i+")="+interpolatedCoordinates[i,1]);
+                Console.WriteLine("Xp(" + i + ")=" + interpolatedCoordinates[i, 0] + "  , Yp(" + i + ")=" + interpolatedCoordinates[i, 1]);
             }
         }
 
         public void CalculateShapeFunctionsDerivatives()
         {
-            for (int pc=0;pc<4;++pc)
+            for (int pc = 0; pc < 4; ++pc)
             {
-                dNdKsi[0, pc] = -0.25 * (1.0-eta[pc]);
+                dNdKsi[0, pc] = -0.25 * (1.0 - eta[pc]);
                 dNdKsi[1, pc] = 0.25 * (1.0 - eta[pc]);
                 dNdKsi[2, pc] = 0.25 * (1.0 + eta[pc]);
                 dNdKsi[3, pc] = -0.25 * (1.0 + eta[pc]);
@@ -128,13 +128,13 @@ namespace MES_Console
                 dNdEta[3, pc] = 0.25 * (1.0 - ksi[pc]);
             }
         }
-        
+
         public void calculateJacobian(Element element)
         {
             CalculateShapeFunctions();
             CalculateShapeFunctionsDerivatives();
 
-            for (int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 jacobian[0, i] = element.getNode(0).X1 * dNdKsi[0, i] + element.getNode(1).X1 * dNdKsi[1, i] + element.getNode(2).X1 * dNdKsi[2, i] + element.getNode(3).X1 * dNdKsi[3, i];
                 jacobian[1, i] = element.getNode(0).Y1 * dNdKsi[0, i] + element.getNode(1).Y1 * dNdKsi[1, i] + element.getNode(2).Y1 * dNdKsi[2, i] + element.getNode(3).Y1 * dNdKsi[3, i];
@@ -148,7 +148,7 @@ namespace MES_Console
                 inversedJacobian[2, i] = -(jacobian[2, i] / detJacobian[i]);
                 inversedJacobian[3, i] = jacobian[0, i] / detJacobian[i];
             }
-            
+
         }
 
         public void printShapeFunctionsDerivativesKsi()
@@ -175,19 +175,19 @@ namespace MES_Console
 
         public void printJacobian()
         {
-            for(int i =0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 Console.WriteLine("j[" + i + ",0]=" + jacobian[i, 0]);
                 Console.WriteLine("j[" + i + ",1]=" + jacobian[i, 1]);
                 Console.WriteLine("j[" + i + ",2]=" + jacobian[i, 2]);
                 Console.WriteLine("j[" + i + ",3]=" + jacobian[i, 3]);
             }
-            
+
         }
 
         public void printDetJacobian()
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 Console.WriteLine("detJ[" + i + "]=" + detJacobian[i]);
             }
@@ -195,7 +195,7 @@ namespace MES_Console
 
         public void printInversedJacobian()
         {
-            for(int i=0;i<4;++i)
+            for (int i = 0; i < 4; ++i)
             {
                 Console.WriteLine("invJ[" + i + ",0]=" + inversedJacobian[i, 0]);
                 Console.WriteLine("invJ[" + i + ",1]=" + inversedJacobian[i, 1]);
@@ -204,7 +204,7 @@ namespace MES_Console
             }
         }
 
-        
-            
+
+
     }
 }
