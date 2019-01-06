@@ -113,7 +113,7 @@ namespace MES_Console
             }
         }
 
-        public void calculateShapeFunctionsDerivatives()
+        public void CalculateShapeFunctionsDerivatives()
         {
             for (int pc=0;pc<4;++pc)
             {
@@ -153,7 +153,10 @@ namespace MES_Console
 
         public void calculateJacobian(Element element)
         {
-            for(int i=0;i<4;++i)
+            CalculateShapeFunctions();
+            CalculateShapeFunctionsDerivatives();
+
+            for (int i=0;i<4;++i)
             {
                 jacobian[0, i] = element.getNode(0).X1 * dNdKsi[0, i] + element.getNode(1).X1 * dNdKsi[1, i] + element.getNode(2).X1 * dNdKsi[2, i] + element.getNode(3).X1 * dNdKsi[3, i];
                 jacobian[1, i] = element.getNode(0).Y1 * dNdKsi[0, i] + element.getNode(1).Y1 * dNdKsi[1, i] + element.getNode(2).Y1 * dNdKsi[2, i] + element.getNode(3).Y1 * dNdKsi[3, i];

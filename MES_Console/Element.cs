@@ -83,5 +83,12 @@ namespace MES_Console
             return isSurfaceHeated[index]; 
         }
 
+        public void PrintLocalMatrices()
+        {
+            Console.WriteLine("elID=" + Id);
+            Console.WriteLine("MatrixH\n"+LocalMatrixH.ToString());
+            Console.WriteLine("MatrixC\n" + LocalMatrixC.ToString());
+            Console.WriteLine("VectorP\n" + LocalVectorP.ToString());
+        }
     }
 }

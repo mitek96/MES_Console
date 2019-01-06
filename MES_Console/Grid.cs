@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace MES_Console
 {
@@ -16,13 +17,31 @@ namespace MES_Console
         int nH, nL, numberOfNodes, numberOfElements;
         static double startX = 0.0;
         static double startY = 0.0;
-        
-        public Grid(double h, double l, int nH, int nL)
+        private double initTemperature;
+        private double simulationTime;
+        private double timeStep;
+        private double ambientTemperature;
+        private double alpha;
+        private double specificHeat;
+        private double conductivity;
+        private double density;
+        //Matrix<double>
+
+
+        public Grid(double initTemperature, double simulationTime, double timeStep, double ambientTemperature, double alpha, double h, double l, int nH, int nL, double specificHeat, double conductivity, double density)
         {
+            this.initTemperature = initTemperature;
+            this.simulationTime = simulationTime;
+            this.timeStep = timeStep;
+            this.ambientTemperature = ambientTemperature;
+            this.alpha = alpha;
             H = h;
             L = l;
             this.nH = nH;
             this.nL = nL;
+            this.specificHeat = specificHeat;
+            this.conductivity = conductivity;
+            this.density = density;
         }
 
         public int CalculateNodeArray()
@@ -65,6 +84,24 @@ namespace MES_Console
             }
 
             return numberOfElements;
+        }
+
+        public void CalculateElements()
+        {
+            for(int i=0;i<numberOfElements;++i)
+            {
+                Jacobian jacobian = new Jacobian();
+                jacobian.calculateJacobian(elements[i]);
+                MatrixH tempMatrixH = new MatrixH();
+                elements[i].LocalMatrixH = tempMatrixH.calculateMatrixH(jacobian, conductivity);
+                MatrixC tempMatrixC = new MatrixC(specificHeat, density, jacobian.getDetJArray());
+                MatrixH_BC tempMatrixH_BC = new MatrixH_BC(alpha, elements[i]);
+                VectorP tempVectorP = new VectorP(alpha, ambientTemperature, elements[i]);
+                elements[i].LocalMatrixC=tempMatrixC.CalculateMatrixC();
+                elements[i].LocalMatrixH.Add(tempMatrixH_BC.CalculateMatrixH_BC());
+                elements[i].LocalVectorP=tempVectorP.CalculateVectorP();
+                elements[i].PrintLocalMatrices();
+            }
         }
 
         public void CalculateFEM(double time, int iterations)
