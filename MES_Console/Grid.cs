@@ -25,7 +25,8 @@ namespace MES_Console
         private double specificHeat;
         private double conductivity;
         private double density;
-        //Matrix<double>
+        Matrix<double> globalMatrixH, globalMatrixC;
+        Vector<double> globalVectorP;
 
 
         public Grid(double initTemperature, double simulationTime, double timeStep, double ambientTemperature, double alpha, double h, double l, int nH, int nL, double specificHeat, double conductivity, double density)
@@ -42,6 +43,9 @@ namespace MES_Console
             this.specificHeat = specificHeat;
             this.conductivity = conductivity;
             this.density = density;
+            globalMatrixH = Matrix<double>.Build.Dense(nH * nL, nH * nL);
+            globalMatrixC = Matrix<double>.Build.Dense(nH * nL, nH * nL);
+            globalVectorP = Vector<double>.Build.Dense(nH * nL);
         }
 
         public int CalculateNodeArray()
@@ -53,6 +57,7 @@ namespace MES_Console
             for(int i=0; i<numberOfNodes;++i)
             {
                 nodes[i] = new Node();
+                nodes[i].T = initTemperature;
             }
             for(int nX = 0; nX < nL;++nX)
             {
@@ -98,22 +103,18 @@ namespace MES_Console
                 MatrixH_BC tempMatrixH_BC = new MatrixH_BC(alpha, elements[i]);
                 VectorP tempVectorP = new VectorP(alpha, ambientTemperature, elements[i]);
                 elements[i].LocalMatrixC=tempMatrixC.CalculateMatrixC();
-                elements[i].LocalMatrixH.Add(tempMatrixH_BC.CalculateMatrixH_BC());
+                elements[i].LocalMatrixH=elements[i].LocalMatrixH.Add(tempMatrixH_BC.CalculateMatrixH_BC());
                 elements[i].LocalVectorP=tempVectorP.CalculateVectorP();
                 elements[i].PrintLocalMatrices();
             }
         }
 
-        public void CalculateFEM(double time, int iterations)
-        {
-            
-        }
 
         public void PrintNodes()
         {
             for(int i=0;i<numberOfNodes;++i)
             {
-                Console.WriteLine("NodeId:"+nodes[i].Id+"   NodeCoordinates: ("+nodes[i].X1+"|"+nodes[i].Y1+")");
+                Console.WriteLine("NodeId:"+nodes[i].Id+"   NodeCoordinates: ("+nodes[i].X1+"|"+nodes[i].Y1+") T="+nodes[i].T);
             }
         }
 
@@ -166,6 +167,85 @@ namespace MES_Console
                 for (int i = 0; i < nH - 1; i++)
                     elements[i].SetSurface(3, true);
             }
+        }
+
+        public void AgregateaMatrices()
+        {
+            for(int i=0;i<numberOfElements;++i)
+            {
+                for(int iLocal=0;iLocal<4;++iLocal)
+                {
+                    for(int jLocal=0;jLocal<4;++jLocal)
+                    {
+                        int iGlobal = elements[i].getNode(iLocal).Id - 1;
+                        int jGlobal = elements[i].getNode(jLocal).Id - 1;
+
+                        double valueHLocal = elements[i].LocalMatrixH[iLocal, jLocal];
+                        globalMatrixH[iGlobal, jGlobal] += valueHLocal;
+
+                        double valueCLocal= elements[i].LocalMatrixC[iLocal, jLocal];
+                        globalMatrixC[iGlobal, jGlobal] += valueCLocal;
+                    }
+                }
+            }
+            PrintGlobalMatrices();
+        }
+
+        public void AgregateVectorP()
+        {
+            for (int i = 0; i < numberOfElements; ++i)
+            {
+                for (int iLocal = 0; iLocal < 4; ++iLocal)
+                {
+                    int iGlobal = elements[i].getNode(iLocal).Id - 1;
+
+                    double valuePLocal = elements[i].LocalVectorP[iLocal];
+                    globalVectorP[iGlobal] += valuePLocal;
+                }
+            }
+
+            PrintGlobalVector();
+        }
+
+        public void Heat()
+        {
+            Matrix<double> leftEquation = globalMatrixH.Add(globalMatrixC.Divide(timeStep));
+            Console.WriteLine("H+C/dt" + leftEquation.ToString());
+            for(double time=timeStep;time<=simulationTime;time+=timeStep)
+            {
+                Vector<double> t0 = Vector<double>.Build.Dense(numberOfNodes);
+                for(int i=0;i<numberOfNodes;++i)
+                {
+                    t0[i] = nodes[i].T;
+                }
+
+                Vector<double> rightEquation = -globalVectorP + globalMatrixC.Divide(timeStep).Multiply(t0);
+                Vector<double> t1 = leftEquation.Solve(rightEquation);
+
+                for (int i = 0; i < numberOfNodes; ++i)
+                {
+                    nodes[i].T=t1[i];
+                }
+
+                Console.WriteLine("Interval=" + time);
+                Console.WriteLine("======================================");
+                Console.WriteLine("Min=" + t1.Min());
+                Console.WriteLine("Max=" + t1.Max());
+                Console.WriteLine("P" + rightEquation.ToString());
+
+            }
+
+        }
+
+        public void PrintGlobalMatrices()
+        {
+            Console.WriteLine("MatrixH\n" + globalMatrixH.ToString());
+            Console.WriteLine("MatrixC\n" + globalMatrixC.ToString());
+        }
+
+        public void PrintGlobalVector()
+        {
+            Console.WriteLine("VectorP\n" + globalVectorP.ToString());
         }
     }
 }

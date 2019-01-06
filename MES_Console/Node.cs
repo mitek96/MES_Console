@@ -11,7 +11,7 @@ namespace MES_Console
         static int idReference=0;
 
         double X, Y;
-        double T;
+        public double T { get; set; }
 
         public Node(double x, double y, double t)
         {

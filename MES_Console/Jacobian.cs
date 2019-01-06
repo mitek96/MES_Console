@@ -128,29 +128,7 @@ namespace MES_Console
                 dNdEta[3, pc] = 0.25 * (1.0 - ksi[pc]);
             }
         }
-
-        public void printShapeFunctionsDerivativesKsi()
-        {
-            for(int i=0;i<4;++i)
-            {
-                Console.WriteLine("dN/dKsi[0," + i + "]=" + dNdKsi[0, i]);
-                Console.WriteLine("dN/dKsi[1," + i + "]=" + dNdKsi[1, i]);
-                Console.WriteLine("dN/dKsi[2," + i + "]=" + dNdKsi[2, i]);
-                Console.WriteLine("dN/dKsi[3," + i + "]=" + dNdKsi[3, i]);
-            }
-        }
-
-        public void printShapeFunctionsDerivativesEta()
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                Console.WriteLine("dN/dEta[0," + i + "]=" + dNdEta[0, i]);
-                Console.WriteLine("dN/dEta[1," + i + "]=" + dNdEta[1, i]);
-                Console.WriteLine("dN/dEta[2," + i + "]=" + dNdEta[2, i]);
-                Console.WriteLine("dN/dEta[3," + i + "]=" + dNdEta[3, i]);
-            }
-        }
-
+        
         public void calculateJacobian(Element element)
         {
             CalculateShapeFunctions();
@@ -170,8 +148,29 @@ namespace MES_Console
                 inversedJacobian[2, i] = -(jacobian[2, i] / detJacobian[i]);
                 inversedJacobian[3, i] = jacobian[0, i] / detJacobian[i];
             }
-
             
+        }
+
+        public void printShapeFunctionsDerivativesKsi()
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                Console.WriteLine("dN/dKsi[0," + i + "]=" + dNdKsi[0, i]);
+                Console.WriteLine("dN/dKsi[1," + i + "]=" + dNdKsi[1, i]);
+                Console.WriteLine("dN/dKsi[2," + i + "]=" + dNdKsi[2, i]);
+                Console.WriteLine("dN/dKsi[3," + i + "]=" + dNdKsi[3, i]);
+            }
+        }
+
+        public void printShapeFunctionsDerivativesEta()
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                Console.WriteLine("dN/dEta[0," + i + "]=" + dNdEta[0, i]);
+                Console.WriteLine("dN/dEta[1," + i + "]=" + dNdEta[1, i]);
+                Console.WriteLine("dN/dEta[2," + i + "]=" + dNdEta[2, i]);
+                Console.WriteLine("dN/dEta[3," + i + "]=" + dNdEta[3, i]);
+            }
         }
 
         public void printJacobian()

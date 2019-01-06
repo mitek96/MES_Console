@@ -56,7 +56,8 @@ namespace MES_Console
             for(int i=0;i<4;++i)
             { 
                 pc[i] = matrixC.Row(i).ToColumnMatrix() * matrixC.Row(i).ToRowMatrix();
-                pc[i] = pc[i].Multiply(C * ro * detJ[i]);
+                double toMul = C * ro * detJ[i];
+                pc[i] = pc[i].Multiply(toMul);
             }
 
             for (int i = 0; i < 4; ++i)
