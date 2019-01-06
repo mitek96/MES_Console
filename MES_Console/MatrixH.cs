@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace MES_Console
 {
@@ -33,7 +34,7 @@ namespace MES_Console
         }
 
 
-        public void calculateMatrixH(Jacobian jacobian,double k)
+        public Matrix<double> calculateMatrixH(Jacobian jacobian,double k)
         {
             for(int i=0;i<4;++i)
             {
@@ -74,6 +75,8 @@ namespace MES_Console
                     H[i, j] = sum[0, i, j] + sum[1, i, j] + sum[2, i, j] + sum[3, i, j];
                 }
             }
+
+            return Matrix<double>.Build.DenseOfArray(H);
         }
 
         public void printDNdxT(int pcIndex)

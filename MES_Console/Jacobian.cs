@@ -67,8 +67,13 @@ namespace MES_Console
             return detJacobian[x];
         }
 
+        public double [] getDetJArray()
+        {
+            return detJacobian;
+        }
 
-        public void calculateShapeFunctions()
+
+        public void CalculateShapeFunctions()
         {
             
             for(int i =0;i<4;++i)
@@ -110,17 +115,17 @@ namespace MES_Console
 
         public void calculateShapeFunctionsDerivatives()
         {
-            for (int i=0;i<4;++i)
+            for (int pc=0;pc<4;++pc)
             {
-                dNdKsi[0, i] = -0.25 * (1.0-eta[i]);
-                dNdKsi[1, i] = 0.25 * (1.0 - eta[i]);
-                dNdKsi[2, i] = 0.25 * (1.0 + eta[i]);
-                dNdKsi[3, i] = -0.25 * (1.0 + eta[i]);
+                dNdKsi[0, pc] = -0.25 * (1.0-eta[pc]);
+                dNdKsi[1, pc] = 0.25 * (1.0 - eta[pc]);
+                dNdKsi[2, pc] = 0.25 * (1.0 + eta[pc]);
+                dNdKsi[3, pc] = -0.25 * (1.0 + eta[pc]);
 
-                dNdEta[0, i] = -0.25 * (1.0 - ksi[i]);
-                dNdEta[1, i] = -0.25 * (1.0 + ksi[i]);
-                dNdEta[2, i] = 0.25 * (1.0 + ksi[i]);
-                dNdEta[3, i] = 0.25 * (1.0 - ksi[i]);
+                dNdEta[0, pc] = -0.25 * (1.0 - ksi[pc]);
+                dNdEta[1, pc] = -0.25 * (1.0 + ksi[pc]);
+                dNdEta[2, pc] = 0.25 * (1.0 + ksi[pc]);
+                dNdEta[3, pc] = 0.25 * (1.0 - ksi[pc]);
             }
         }
 
@@ -196,6 +201,8 @@ namespace MES_Console
                 Console.WriteLine("invJ[" + i + ",3]=" + inversedJacobian[i, 3]);
             }
         }
+
+        
             
     }
 }

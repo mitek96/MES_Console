@@ -22,16 +22,21 @@ namespace MES_Console
             int elementNumber = grid.CalculateElementArray();
             Console.WriteLine("Number of Elements: "+elementNumber);
             grid.PrintElements();
+            grid.SetHeatedSurfaces(true, true, true, true);
             Jacobian jacobian = new Jacobian();
             Element testElem = new Element();
+            testElem.SetSurface(0, true);
+            //testElem.SetSurface(1, true);
             Node testNode1 = new Node(0.0, 0.0, 0.0);
             Node testNode2 = new Node(0.025, 0.0, 0.0);
             Node testNode3 = new Node(0.025, 0.025, 0.0);
             Node testNode4 = new Node(0.0, 0.025, 0.0);
             testElem.setNodesArray(ref testNode1, ref testNode2, ref testNode3, ref testNode4);
             MatrixH testMatrixH = new MatrixH();
-
-            jacobian.calculateShapeFunctions();
+            MatrixC testMatrixC = new MatrixC(700.0, 7800.0, jacobian.getDetJArray());
+            MatrixH_BC testMatrixH_BC = new MatrixH_BC(25.0, testElem);
+            VectorP testVectorP = new VectorP(300.0, 1200.0, testElem);
+            jacobian.CalculateShapeFunctions();
             //jacobian.printShapeFunctions();
             jacobian.calculateInterpolatedCoordinates(testElem);
             //jacobian.printInterpolatedCoordinates();
@@ -42,12 +47,25 @@ namespace MES_Console
             //jacobian.printJacobian();
             //jacobian.printDetJacobian();
             //jacobian.printInversedJacobian();
-            testMatrixH.calculateMatrixH(jacobian,30.0);
+            //testMatrixH.calculateMatrixH(jacobian,30.0);
             //testMatrixH.printDNdx();
             //testMatrixH.printDNdy();
             //testMatrixH.printDNdxT(3);
             //testMatrixH.printSum(3);
-            testMatrixH.printMatrixH();
+            //testMatrixH.printMatrixH();
+
+            //testMatrixC.calculatePc();
+            //testMatrixC.calculateMatrixC();
+            //testMatrixC.printMatrixC();
+
+            testMatrixC.CalculateMatrixC();
+            //testMatrixC.print();
+            testMatrixH_BC.CalculateMatrixH_BC();
+            //testMatrixH_BC.print();
+            //testMatrixC.printMatrixC();
+            testElem.LocalVectorP=testVectorP.CalculateVectorP();
+            //testVectorP.print();
+            //Console.WriteLine(testElem.LocalVectorP.ToString());
         }
     }
 }

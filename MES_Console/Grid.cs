@@ -67,6 +67,11 @@ namespace MES_Console
             return numberOfElements;
         }
 
+        public void CalculateFEM(double time, int iterations)
+        {
+            
+        }
+
         public void PrintNodes()
         {
             for(int i=0;i<numberOfNodes;++i)
@@ -94,9 +99,36 @@ namespace MES_Console
             }
         }
 
-        public Element getElement(int index)
+        public Element GetElement(int index)
         {
             return elements[index];
+        }
+
+        public void SetHeatedSurfaces(Boolean bottom, Boolean right,Boolean top,Boolean left)
+        {
+            if(bottom)
+            {
+                for(int i=0; i < nL - 1; ++i)
+                elements[i * (nH - 1)].SetSurface(0,true);
+            }
+
+            if (right)
+            {
+                for (int i = ((nH - 1) * (nL - 1)) - 1; i > ((nH - 1) * (nL - 1)) - 1 - (nH - 1); i--)
+                    elements[i].SetSurface(1, true);
+            }
+
+            if(top)
+            {
+                for (int i = 0; i < nL - 1; i++)
+                    elements[i * (nH - 1) + (nH - 2)].SetSurface(2, true);
+            }
+
+            if (left)
+            {
+                for (int i = 0; i < nH - 1; i++)
+                    elements[i].SetSurface(3, true);
+            }
         }
     }
 }

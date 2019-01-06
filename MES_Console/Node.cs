@@ -10,35 +10,23 @@ namespace MES_Console
     {
         static int idReference=0;
 
+        double X, Y;
+        double T;
+
         public Node(double x, double y, double t)
         {
             X = x;
             Y = y;
             T = t;
-            id = ++idReference;
+            Id = ++idReference;
         }
 
         public Node()
         {
-            id = ++idReference;
+            Id = ++idReference;
         }
 
-        double X,Y;
-        double T;
-        int id;
-
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-
-            set
-            {
-                id = value;
-            }
-        }
+        public int Id { get; set; }
 
         public double X1
         {
