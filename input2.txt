@@ -1,12 +1,25 @@
-100,0
-500,0
-50,0
-1200,0
-25,0
-0,100
-0,100
-4
-4
-700,0
-30,0
-7800,0
+20,0		
+100,0		
+1,0		
+1200,0		
+300,0		
+0,020		
+0,020		
+20			
+20		
+900,0		
+0,05		
+144,0
+
+#initial temperature [C]
+#simulation time [s]
+#simulation step time [s]
+#ambient temperature [C]
+#alpha [W/m^2*K]
+#H [m]
+#L [m]
+#N_H
+#N_L
+#specific heat [J/(kg*C)]
+#conductivity [W/(m*K)]
+#density [kg/m^3]
