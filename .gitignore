@@ -240,4 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/plot/16.01.2019_21_27_36
+/plot/*
