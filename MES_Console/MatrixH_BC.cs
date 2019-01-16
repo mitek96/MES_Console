@@ -25,7 +25,6 @@ namespace MES_Console
     class MatrixH_BC
     {
 
-
         double alpha;
         Element element;
         PointKsiEta[] integralPoints;
@@ -63,7 +62,7 @@ namespace MES_Console
             length[2] = Math.Sqrt(Math.Pow(element.getNode(2).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(2).Y1 - element.getNode(3).Y1, 2));
             length[3] = Math.Sqrt(Math.Pow(element.getNode(0).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(0).Y1 - element.getNode(3).Y1, 2));
 
-            detJ[0] = length[0] / 2.0;  //bok to 1D, detJ=dlugosc/2
+            detJ[0] = length[0] / 2.0;  //side is 1D, detJ=length/2
             detJ[1] = length[1] / 2.0;
             detJ[2] = length[2] / 2.0;
             detJ[3] = length[3] / 2.0;
@@ -96,8 +95,6 @@ namespace MES_Console
             right = CalculateSurface(integralPoints[2], integralPoints[3], detJ[1]);
             top = CalculateSurface(integralPoints[4], integralPoints[5], detJ[2]);
             left = CalculateSurface(integralPoints[6], integralPoints[7], detJ[3]);
-
-
 
             if (element.GetSurface(0)) matrixH_BC = matrixH_BC.Add(bottom.sum);
             if (element.GetSurface(1)) matrixH_BC = matrixH_BC.Add(right.sum);
