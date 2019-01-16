@@ -11,11 +11,11 @@ namespace MES_Console
     {
         double[] ksi;
         double[] eta;
-        double[] detJ;
+        double[] detJ;  //wyznacznik macierzy Jakobiego
 
         double C, ro;
         Matrix<double> matrixC;
-        Matrix<double>[] pc; //integral points matrices
+        Matrix<double>[] pc; //macierze punktów całkowania
 
         public MatrixC(double C, double ro, double[] detJ)
         {
@@ -60,8 +60,6 @@ namespace MES_Console
                 pc[i] = pc[i].Multiply(toMul);
             }
 
-            matrixC.Clear();
-
             for (int i = 0; i < 4; ++i)
             {
                 matrixC = matrixC.Add(pc[i]);
@@ -70,10 +68,16 @@ namespace MES_Console
             return matrixC;
         }
 
-        public void Print()
+        public void print()
         {
             Console.Write(matrixC.ToString());
         }
+
+
+
+
+
+
 
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace MES_Console
 {
@@ -11,9 +10,7 @@ namespace MES_Console
     {
         static void Main(string[] args)
         {
-            string workingDirectory = Environment.CurrentDirectory;
-            string[] lines = System.IO.File.ReadAllLines(Directory.GetParent(workingDirectory).Parent.FullName + "\\..\\input.txt");    //read input file
-            //parse values from file:
+            string[] lines = System.IO.File.ReadAllLines(@"C:\Users\Milosz Ryba\documents\visual studio 2015\Projects\MES_Console\input.txt");
             double initTemperature = double.Parse(lines[0]);
             double simulationTime = double.Parse(lines[1]);
             double timeStep = double.Parse(lines[2]);
@@ -26,19 +23,23 @@ namespace MES_Console
             double specificHeat = double.Parse(lines[9]);
             double conductivity = double.Parse(lines[10]);
             double density = double.Parse(lines[11]);
+            Grid grid = new Grid(initTemperature, simulationTime, timeStep, ambientTemperature, alpha, h, l, nH, nL, specificHeat, conductivity, density);
+            int nodeNumber = grid.CalculateNodeArray();
+            Console.WriteLine("Number of Nodes: " + nodeNumber);
+            grid.PrintNodes();
+            int elementNumber = grid.CalculateElementArray();
+            Console.WriteLine("Number of Elements: " + elementNumber);
+            grid.PrintElements();
+            grid.SetHeatedSurfaces(true, true, true, true);
 
 
-            Grid grid = new Grid(initTemperature, simulationTime, timeStep, ambientTemperature, alpha, h, l, nH, nL, specificHeat, conductivity, density);  //create new grid
-            int nodeNumber = grid.CalculateNodeArray(); //create nodes
-            //Console.WriteLine("Number of Nodes: " + nodeNumber);
-            //grid.PrintNodes();    //print nodes
-            int elementNumber = grid.CalculateElementArray();   //create elements
-            //Console.WriteLine("Number of Elements: " + elementNumber);
-            //grid.PrintElements(); //print elements
-            grid.SetHeatedSurfaces(true, true, true, true); //set boundary conditions
-            grid.CalculateLocalMatricesAndVector();   //calculate local matrices and vector for each element
-            grid.AgregateaMatricesAndVector();   //agregate matrices and vector
-            grid.Heat();    //start grid heating
+            grid.CalculateElements();
+
+            grid.AgregateaMatrices();
+            grid.AgregateVectorP();
+            grid.Heat();
+            grid.PrintNodes();
+
 
         }
     }

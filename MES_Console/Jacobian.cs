@@ -72,6 +72,7 @@ namespace MES_Console
             return detJacobian;
         }
 
+
         public void CalculateShapeFunctions()
         {
 

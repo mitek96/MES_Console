@@ -12,6 +12,7 @@ namespace MES_Console
     {
         static int idReference = 0;
         int[] idArray;
+        //ArrayList nodeList;
         List<Node> nodeList;
         bool[] isSurfaceHeated;
 

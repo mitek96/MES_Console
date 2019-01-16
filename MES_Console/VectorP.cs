@@ -48,7 +48,7 @@ namespace MES_Console
             length[2] = Math.Sqrt(Math.Pow(element.getNode(2).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(2).Y1 - element.getNode(3).Y1, 2));
             length[3] = Math.Sqrt(Math.Pow(element.getNode(0).X1 - element.getNode(3).X1, 2) + Math.Pow(element.getNode(0).Y1 - element.getNode(3).Y1, 2));
 
-            detJ[0] = length[0] / 2.0;  //side is 1D, detJ=length/2
+            detJ[0] = length[0] / 2.0;  //bok to 1D, detJ=dlugosc/2
             detJ[1] = length[1] / 2.0;
             detJ[2] = length[2] / 2.0;
             detJ[3] = length[3] / 2.0;
@@ -90,7 +90,7 @@ namespace MES_Console
             return vectorP;
         }
 
-        public void Print()
+        public void print()
         {
             Console.Write(vectorP.ToString());
         }
